@@ -1,0 +1,456 @@
+:root{ 
+	/*palette*/
+	--primary-solid: #FF3333;
+	--primary-900: rgba(255,51,51,0.9);
+	--primary-500: rgba(255,51,51,0.5);
+	--primary-300: rgba(255,51,51,0.3);
+
+	--secondary-solid: #1D84B5;
+	--secondary-900: rgb(29,132,181,0.9);
+	--secondary-500: rgb(29,132,181,0.5);
+	--secondary-300: rgb(29,132,181,0.3);
+
+	--dark-solid: 1F1F1F;
+	--dark-900: rgb(31,31,31,0.9);
+	--dark-500: rgb(31,31,31,0.5);
+	--dark-300: rgb(31,31,31,0.3);
+
+	--dark-bg-solid: #30343F;
+	--light-bg-solid: #FAFAFF;
+	--light-font-solid: #FFFFFF;
+
+	/*tipography*/
+	--base-font: 'Inter' , sans-serif;
+	--alternative-font: 'Raleway' , sans-serif;
+
+	/*font-sizes*/
+	--font-display: 4.4em;
+	--font-jumbo: 3.8em;
+	--font-xlarge: 3em;
+	--font-large: 2.4em;
+	--font-medium: 1.8em;
+	--font-small: 1.6em;
+	--font-xsmall: 1.4em;
+
+	/*spacings*/
+	--spacing-128: 12.8em;
+	--spacing-68: 6.8em;
+	--spacing-36: 3.6em;
+	--spacing-28: 2.8em;
+	--spacing-24: 2.4em;
+	--spacing-20: 2.0em;
+	--spacing-16: 1.6em;
+	--spacing-12: 1.2em;
+	--spacing-8: 0.8em;
+}
+
+*,
+*::before,
+*::after  {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	font-family: var(--base-font);
+	font-size: 62.5%;
+	color: var(--dark-solid);
+}
+
+a {
+	text-decoration: none;
+	font-family: inherit;
+	color: inherit;
+}
+
+header,
+footer {
+		font-family: var(--alternative-font);
+		color: var(--light-font-solid);
+}
+
+ul , ol {
+		list-style-type: none;
+}
+
+p {
+ font-size: 1.8em;
+}
+
+img {
+	width: 100%; /* esto sirve para que q al aplicar tamaños especificos a una imagen , sea " normalizada" y respete los tamaños sin hacer overflow */
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+/* HEADER */ /*RESPETAR EL ORDEN DE LAS ESTRUCTURAS DEL HTML - HEADER APARECE PRIMERO QUE NAVBAR QUE ESTA ANTES DE NAVBAR__LOGO Y ASI SUCESIVAMENTE */
+
+header {
+	background-color: var(--dark-bg-solid) ;
+	padding: var(--spacing-36);
+}
+
+.navbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.navbar__logo{
+	max-width: 300px;
+}
+
+.navbar__menu {
+	display: flex;				/*ALINEA ITEMS UNO AL LADO DEL OTRO*/ 
+	align-items:center;
+	gap: var(--spacing-20);
+}
+
+.navbar__link {
+	font-size: var(--font-medium);
+	padding: var(--spacing-8) var(--spacing-16);			/*para que no quede feo amontonado los botones*/
+	display: inline-block;									/*para respetar en padding en el flujo de la pagina*/
+	transition: background .3s ease-in-out;					/* efecto visual de los botones */
+	position: relative;										/*no afecta en nada el comportamiento del navbar pero si permite que el elemento hijo de submenu se posicione debajo de este  es decir submenu es relativo al padre*/
+}
+
+.navbar__link:hover {
+	background-color: var(--primary-900);
+}
+
+.with-icon {
+	display: flex;			/* se pone debajo de navbar link xq sino toma el inline block por jerarquia (si lo coloco arriba del display block del navbar_link no aplica esta propiedad*/
+	align-items: center; 	/*alinear el icono de la flecha para que no quede arriba de la palabra*/
+	gap: var(--spacing-8);	/*que los elementos se separen 8px */
+}
+
+.with-submenu:hover .submenu{
+	display: block;
+}
+
+.submenu {
+	display: none;								/*el menu desaparece salvo se aplique la propiedad de with__submenu que lo muestra*/
+	width: 300px;
+	position: absolute; 						/*para sacarlo del flujo de la pagina */
+	background-color: var(--dark-bg-solid);		/* mismo color de fondo que el elemento contenedor */
+	z-index: 3;
+}
+
+.submenu__link{
+	display: block;	
+	padding: var(--spacing-8) var(--spacing-16);		/*spacing8 a los lados y 16 arriba y abajo*/
+	font-size: var(--font-medium);
+	transition: background .3s ease-in-out;					/* efecto visual de los botones */
+}
+
+.submenu__link:hover {
+	background-color: var(--primary-900); 
+}
+
+/* BANNER O ELEMENTO HERO */
+
+.hero {
+	background-image: url(../img/funkos-banner.webp);
+	padding: var(--spacing-128);
+	background-position: top;
+	background-size: cover;
+	background-attachment: fixed;		/*propiedad que ahce que el fondo no se mueva cuando se redimemsiona la pagina */
+	position: relative;					/* no olvidar los positions de todos los elementos sino no sale*/
+}
+								/* para lograr el efecto de filtro oscuro y blureado no se puede colocar la propiedad filter sobre hero de manera directa pues eso afecta a hero (tanto imagen como texto cuando la idea es solo afectar la imagen
+								para ello no existe propiedad css que nos deje hacer solo al background. para esto se usa un truco de modificar la pseudoclase de hero "::before" donde colocamos una capa nueva que le colocaremos un contenido pero solo vacio (content'')
+								a ello se le cvambia el position de static (que lo ubica detras de la imagen) y queremos que se coloque delante y se vea , se cambia a position absolute y al padre un position relative dandole el ancho y alto de 100%
+								al recargar agrega el elemento oscuro pero en otra posicion , para corregir esto se agrega un top 0 y un left 0, se agrega tras parencia de cero y se puede ahora aplicar la propiedad backdrop-filter con el blu y brillo deseados sin olvidar que 
+								para que no afecte y teniendo en cuenta los cambios de posicion absoluta y relativa podemos tocar el z-index para moverlo hacia delante o detras segun nos interese. */
+.hero::before {
+	content: '';
+	background-color: (0,0,0, 1);
+	width: 100%;
+	height: 100%;
+	position: absolute;			/* no olvidar los positions de todos los elementos sino no sale*/
+	top: 0;
+	left: 0;
+	backdrop-filter: blur(2px) brightness(.9);
+	
+}
+
+.hero__content {
+	display: flex; 			 /*si no la uso igual quedan una encima de otro pero no puedo usar la propiedad gap para obtener las separaciones sin calcular */
+	flex-direction: column;
+	gap: var(--spacing-20);   /*esta propiedad me deja usarla solo si esta display flex */
+	align-items: start;			/* por defecto es stretch esto hace que por la propiedad display flex tome todo el ancho del contenedor padre (en este caso el article) si le ponemos start se ubican en el inicio y solo tomoan el tamaño del elemento*/
+	z-index: 2;
+	position: relative;				/* no olvidar los positions de todos los elementos sino no sale*/
+}
+
+.hero__title {
+	font-family: var(--alternative-font);
+	font-size: var(--font-jumbo);
+	color: var(--light-font-solid);
+}
+
+.hero__text {
+	font-family: var(--alternative-font);
+	font-size: var(--font-medium);
+	color: var(--light-font-solid);
+}
+
+.hero__link {
+	display: inline-block;
+	font-size: var(--font-medium);
+	background-color: var(--light-bg-solid);
+	padding: var(--spacing-12) var(--spacing-68);
+	border-radius: 50px;
+	font-weight: 500;
+	transition: all .3s ease-in-out;
+}
+
+.hero__link:hover {
+	background-color: var(--primary-900);
+	color: var(--light-font-solid);
+}
+
+/* COLLECTIONS */
+
+.collection {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	align-items: center;
+	padding: var(--spacing-16) 0;
+}
+
+.collection:nth-child(2) .collection__cover {		/* esto nos permite invertir el orden de un solo elemento de una lista */ 
+	order:-1;
+}
+
+.collection__content {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-24);
+	align-items: start;
+}
+
+.collection__title {
+	font-family: var(--alternative-font);
+	font-size: var(--font-display);
+	font-weight: 500;
+}
+
+.collection__text {
+	font-family: var(--alternative-font);
+	font-size: var(--font-large);
+	font-weight: 300;
+	border-bottom: 2px solid var(--primary-solid);
+	padding-bottom: var(--spacing-20);
+}
+
+.collection__link {
+	display: inline-block;
+	font-size: medium;
+	background-color: var(--dark-bg-solid);
+	color: var(--light-font-solid);
+	padding: var(--spacing-16) var(--spacing-36);
+	border-radius: 50px;
+	font-weight: 500;
+	transition: background 0.3s ease-in-out;
+}
+
+.collection__link:hover {
+	background-color: var(--primary-900);
+
+}
+/* SLIDERS */ 
+
+.slider {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-36);
+	margin: var(--spacing-68) auto;
+}
+
+.slider__title {
+	font-family: var(--alternative-font);
+	font-size: var(--font-display);
+	text-transform: uppercase;
+}
+
+.slider__items {
+	display: flex;
+	gap: var(--spacing-24);
+}
+
+.card-item__cover {
+	display: flex;					/* importante , si no se pone esto, el texto hace un salto del efecto de desaparecer y aparecer la imagensiguiente , por eso va flex */ 
+	position: relative;				/*se debe colocar para poder manipular los elementos hijos dentro de la posicion cuando ellos son absolutos */
+}
+
+.card-item__tag{
+font-size: var(--font-xsmall);
+text-transform: uppercase;
+background-color: var(--primary-solid);
+color: var(--light-font-solid);
+padding: var(--spacing-8) var(--spacing-12);
+position: absolute;
+right: 0;						/*si esta propiedad queda sola se va al final de la pagina pues si el padre de este no es relativo , el valor va a depender del body y no del contenedor por ello se debe poner position relative al padre */
+}
+
+.card-item__cover img {
+	animation: fade .7s;
+}
+
+.card-item__img--back {
+	display: none;
+	}
+
+.card-item__cover:hover .card-item__img--back {
+display: block;
+}
+
+.card-item__cover:hover .card-item__img--front {
+	display: none;
+	}
+
+.card-item__content {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-12);
+	padding: var(--spacing-16);
+}
+
+.card-item__license{
+	font-size: var(--font-xsmall);
+	font-weight: 500;
+}
+
+.card-item__name{
+	font-size: var(--font-medium);
+	font-weight: 700;
+}
+
+.card-item__price{
+	font-size: var(--font-small);
+}
+
+.card-item__promo{
+	font-size: var(--font-xsmall);
+	color: var(--secondary-solid);
+	font-weight: 700;
+}
+
+/*FOOTER*/
+
+.footer {
+	background-color: var(--dark-bg-solid);
+	padding: var(--spacing-68);
+}
+
+.footer__copy {
+	margin: var(--spacing-36);
+	text-align: center;
+}
+
+/*ANIMATIONS*/
+@keyframes fade {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+
+
+/*PAGINA SHOP*/
+
+.label {
+	font-size: var(--font-xsmall);
+	font-family: var(--alternative-font);	
+	font-weight: 500;
+}
+
+.label__input {
+	width: 100%;
+	padding: var(--spacing-8);
+	border: 2px solid var(--dark-bg-solid);
+	border-radius: 10px;
+}
+
+.label__input2 {
+	width: 40px;
+	border: 2px solid black;
+	border-radius: 3px;
+}
+
+.checkbox {
+	font-size: var(--font-medium);
+	font-family: var(--alternative-font);	
+	font-weight: 500;
+	padding: var(--spacing-8);
+	text-transform: uppercase;
+}
+
+.shop {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template: 
+	"aside section "	
+	"aside section "
+	"aside section " 
+	 ;
+	margin-top: var(--spacing-68);
+
+}
+
+.shop__title {
+	font-family: var(--alternative-font);
+	font-size: var(--font-large);
+	font-weight: 500;
+	text-transform: uppercase;
+	padding: var(--spacing-8);
+}
+
+.shop__items {
+	align-items: start;
+	flex-direction: column;
+	gap: var(--spacing-24);
+	align-items: start;
+}
+
+
+/* PAGINA ITEM */ 
+
+.collection__text2 {
+	font-family: var(--base-font);
+	font-weight: 500;
+	font-size: var(--font-small);
+}
+
+.collection__title2 {
+	font-family: var(--base-font);
+	font-weight: 700;
+	font-size: var(--font-jumbo);
+}
+
+.collection__text3 {
+	font-family: var(--base-font);
+	font-size: var(--font-large);
+	font-weight: 400;
+}
+
+.collection__price {
+	font-family: var(--base-font);
+	font-weight: 400;
+	font-size: var(--font-jumbo);
+}
+
+.collection__metodospago {
+	font-family: var(--base-font);
+	font-weight: 700;
+	font-size: var(--font-xsmall);
+	color: var(--secondary-solid);
+}
