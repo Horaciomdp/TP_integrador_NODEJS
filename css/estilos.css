@@ -498,7 +498,7 @@ display: block;
 	
 }
 
-input[class="input-minus"], input[class="input-plus"] {
+input[	class="input-minus"], input[class="input-plus"] {
 	width: 38.35px;
 	height: 38.35px;
 	background-color: #4F4F4F;
