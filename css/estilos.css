@@ -400,7 +400,7 @@ display: block;
 
 .shop__main {
 	display: grid;
-	grid-template-columns: repeat(2, 15% 85%); 		/* DOS DIVISIONES UNA AL 20% LA OTRA AL 80% DEL ESPACIO DISPONIBLE */
+	grid-template-columns: repeat(2, 20% 80%); 		/* DOS DIVISIONES UNA AL 20% LA OTRA AL 80% DEL ESPACIO DISPONIBLE */
 	;
 }
 

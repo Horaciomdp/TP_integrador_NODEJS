@@ -60,10 +60,28 @@
 
            
           <div class="item-purchase">
+
             <div class="item-number-selector"> 
-              <div class="minus"><input type="button" class="input-minus" value="-"></div>
-              <div class="number"><input type="text" class="input-number" placeholder="0"></div>
-              <div class="plus"><input type="button" class="input-plus" value="+"> </div>
+
+              <div class="minus">
+                
+                <input type="button" class="input-minus" value="-" name="num1" id="num1" onclick="restar();">   
+              
+              </div>
+
+              <div class="number">
+                <input class="input-number" type="number" name="num" id="num" readonly="" >
+                
+              
+              </div>
+
+
+              <div class="plus">
+                <input type="button" class="input-plus" value="+" name="num2" id="num2" onclick="sumar();">
+                              
+              </div>
+
+              
             </div>
             <div class="cart"> <input type="button" class="button-cart" value="Agregar al carrito "></div>
           </div>
@@ -154,6 +172,7 @@
    <p class="footer__copy">All right reserved 2023 - Funkoshop &copy - Horacio Porto</p>
 </footer>
 <!--  FIN FOOTER -->
-<script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script>  
+<script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script> 
+<script src="../javascript/item.js"></script>   
 </body>
 </html>
